@@ -1,0 +1,55 @@
+---
+source: tests/test-inputs.rs
+expression: stdout
+
+---
+[
+  {
+    "functions": [],
+    "properties": [],
+    "types": [
+      {
+        "name": "Foo",
+        "desc": "A description of the type",
+        "fields": [
+          {
+            "name": "field",
+            "lua_type": "number?",
+            "desc": "A description for the field"
+          },
+          {
+            "name": "another",
+            "lua_type": "string?,
+            "desc": "A description for this field too.\nWith a second line.\nAnd a third"
+          }
+        ],
+        "source": {
+          "line": 12,
+          "path": ""
+        }
+      },
+      {
+        "name": "MultilineFieldComments",
+        "desc": "A description of the type",
+        "fields": [
+          {
+            "name": "field",
+            "lua_type": "string?",
+            "desc": "Now with a multiline comment\n\nFor cases where there's a lot to say about a field"
+          }
+        ],
+        "source": {
+          "line": 27,
+          "path": ""
+        }
+      }
+    ]
+    "name": "TypeDefs",
+    "desc": "Class description",
+    "source": {
+      "line": 6,
+      "path": ""
+    }
+  }
+]
+

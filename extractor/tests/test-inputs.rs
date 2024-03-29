@@ -71,6 +71,11 @@ fn triple_dash_wrong_comment() -> anyhow::Result<()> {
 }
 
 #[test]
+fn type_definitions() -> anyhow::Result<()> {
+    run_moonwave("passing/type_definitions.lua", 0)
+}
+
+#[test]
 fn param_validation() -> anyhow::Result<()> {
     run_moonwave("failing/param_validation.lua", 1)
 }
