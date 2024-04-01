@@ -4,6 +4,11 @@ use crate::{
     serde_util::is_false,
     tags::{CustomTag, FieldTag, Tag},
 };
+use full_moon::{
+    ast::{types::TypeInfo, Stmt},
+    node::Node,
+    tokenizer::TokenType,
+};
 use serde::Serialize;
 
 use super::DocEntryParseArguments;
@@ -62,12 +67,63 @@ impl<'a> TypeDocEntry<'a> {
             source,
         } = args;
 
+        let fields = match &source.stmt {
+            Some(Stmt::ExportedTypeDeclaration(exported_type_declaration)) => {
+                let type_declaration = exported_type_declaration.type_declaration();
+                let type_info = type_declaration.type_definition();
+
+                match type_info {
+                    TypeInfo::Table { fields, .. } => fields
+                        .iter()
+                        .map(|type_field| {
+                            let name = type_field
+                                .key()
+                                .tokens()
+                                .find_map(|token| match token.token_type() {
+                                    TokenType::Identifier { identifier } => {
+                                        Some(identifier.to_string())
+                                    }
+                                    _ => None,
+                                })
+                                .unwrap_or(String::new());
+
+                            let desc = type_field
+                                .key()
+                                .surrounding_trivia()
+                                .0
+                                .iter()
+                                .filter_map(|trivia| match trivia.token_type() {
+                                    TokenType::SingleLineComment { comment } => Some(comment),
+                                    TokenType::MultiLineComment { comment, .. } => Some(comment),
+                                    _ => None,
+                                })
+                                .map(|comment| comment.lines().map(|line| line.trim()))
+                                .flatten()
+                                .collect::<Vec<_>>()
+                                .join("\n")
+                                .trim()
+                                .to_string();
+
+                            return Field {
+                                name,
+                                lua_type: type_field.value().to_string(),
+                                desc,
+                            };
+                        })
+                        .collect::<Vec<_>>(),
+                    _ => vec![],
+                }
+            }
+            Some(_) => vec![],
+            None => vec![],
+        };
+
         let mut doc_entry = Self {
             name,
             desc,
             source,
+            fields,
             lua_type: None,
-            fields: Vec::new(),
             within: within.unwrap(),
             tags: Vec::new(),
             private: false,

@@ -9,7 +9,7 @@ expression: stdout
     "properties": [],
     "types": [
       {
-        "name": "Foo",
+        "name": "Foo ",
         "desc": "A description of the type",
         "fields": [
           {
@@ -19,7 +19,7 @@ expression: stdout
           },
           {
             "name": "another",
-            "lua_type": "string?,
+            "lua_type": "string?",
             "desc": "A description for this field too.\nWith a second line.\nAnd a third"
           }
         ],
@@ -29,12 +29,12 @@ expression: stdout
         }
       },
       {
-        "name": "MultilineFieldComments",
+        "name": "MultilineFieldComments ",
         "desc": "A description of the type",
         "fields": [
           {
             "name": "field",
-            "lua_type": "string?",
+            "lua_type": "boolean",
             "desc": "Now with a multiline comment\n\nFor cases where there's a lot to say about a field"
           }
         ],
@@ -43,7 +43,7 @@ expression: stdout
           "path": ""
         }
       }
-    ]
+    ],
     "name": "TypeDefs",
     "desc": "Class description",
     "source": {

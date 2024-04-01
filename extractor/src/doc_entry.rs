@@ -192,6 +192,19 @@ fn determine_kind(
                 })
             }
         },
+        Some(Stmt::ExportedTypeDeclaration(type_decl)) => {
+            let name = type_decl.type_declaration().type_name().to_string();
+
+            let within = if let Some(within) = within_tag {
+                within.name.as_str().to_owned()
+            } else {
+                return Err(
+                    doc_comment.diagnostic("Exported type declaration requires @within tag")
+                );
+            };
+
+            Ok(DocEntryKind::Type { name, within })
+        }
 
         _ => Err(doc_comment
             .diagnostic("Explicitly specify a kind tag, like @function, @prop, or @class.")),
