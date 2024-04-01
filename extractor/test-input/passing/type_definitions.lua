@@ -32,3 +32,11 @@ export type MultilineFieldComments = {
 	]]
 	field: boolean,
 }
+
+--[[
+	Unexported type declarations should never be extracted
+]]
+type InternalUseOnly = {
+	-- This comment will also never be hoisted
+	foo: boolean,
+}
